@@ -6,42 +6,46 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jexcel/1.5.0/css/jquery.jexcel.min.css" type="text/css" />
 
 <div id="my"></div>
-<P id="demo" >Create</P>
-<script>
 
-    var leftmargin=5;
-    var topmargin = 5;
-    var labelheight = 29.8;
-    var labelwidth = 63.5;
-    var columns = 3;
-    var rows = 9;
-    var columngap = 3;
-    var rowgap = 0;
-    var font = "";
+<P id="demo" >Click here to CreatePDF</P>
+<p>
+<p> Version 0.1
+    <script>
 
-    data = [
-        ['john', 'smith', '10'],
-        ['angle', 'dsfsd', 'sdf'],
-        ['sf', 'sfdsdfs', 'sdfsdfsdfsdfs']
-    ];
+        var leftmargin=5;
+        var topmargin = 5;
+        var labelheight = 29.8;
+        var labelwidth = 63.5;
+        var columns = 3;
+        var rows = 9;
+        var columngap = 3;
+        var rowgap = 0;
+        var font = "";
 
-    $('#my').jexcel({
-        data:data,
-        colWidths: [ 300, 300, 80 ],
-        colHeaders: [ 'Name','AgeGroup','Note']});
+        data = [
+            ['john', 'U10', '07771 873 567'],
+            ['Annabel', 'U10', 'Unregistered'],
+            ['Jim', 'U12', 'Visitor']
+        ];
 
-    function createPDF(update_preview) {
-        var pdf = new jsPDF();
-        var labeldata = $('#my').jexcel('getData');
+        $('#my').jexcel({
+            data:data,
+            colWidths: [ 300, 300, 80 ],
+            colHeaders: [ 'Name','AgeGroup','Note']});
+
+        function createPDF(update_preview) {
+            var pdf = new jsPDF();
+            var labeldata = $('#my').jexcel('getData');
 
 
-        var numberoflabels = data.length;
-        var i;
-        var j;
-        var k=0;
-        var top = 0;
-        var left = 0;
-        // loop through each label
+            var numberoflabels = data.length;
+            var i;
+            var j;
+            var k=0;
+            var top = 0;
+            var left = 0;
+            var textwidth = 0;
+            // loop through each label
 
             for (i = 0; i < (columns); i++) {
                 if (k>(numberoflabels-1)){break;}
@@ -54,31 +58,33 @@
                     pdf.setLineWidth(0.5);
                     pdf.roundedRect( left, top, labelwidth, labelheight, 3, 3, "S");
                     if (data[k][0]) {
+
                         pdf.setFontSize(40);
-                        pdf.text(left + 10, top + 10, data[k][0]);
+                        textwidth = pdf.getStringUnitWidth(data[k][0])*40/(72/25.6);
+                        pdf.text(left + ((labelwidth-textwidth)/2), top + 20, data[k][0]);
                     }
                     if (data[k][1]) {
                         pdf.setFontSize(12);
-                        pdf.text(left + 40, top + 10, data[k][1]);
+                        pdf.text(left + 50, top + 5, data[k][1]);
                     }
                     if (data[k][2]) {
-                        pdf.setFontSize(14);
-                        pdf.text(left + 10, top + 30, data[k][2]);
+                        pdf.setFontSize(12);
+                        pdf.text(left + 10, top + 28, data[k][2]);
                     }
                     k=k+1;
                 }
             }
-        pdf.save('hello_world.pdf');
-        document.getElementById("demo").innerHTML = "YOU CLICKED ME!";
-    }
+            pdf.save('hello_world.pdf');
+            document.getElementById("demo").innerHTML = "YOU CLICKED ME!";
+        }
 
-    document.getElementById("demo").onclick= function() {
-        createPDF(false);
-    };
-
-
+        document.getElementById("demo").onclick= function() {
+            createPDF(false);
+        };
 
 
-</script>
+
+
+    </script>
 
 </html>
