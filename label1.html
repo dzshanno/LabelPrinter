@@ -1,10 +1,84 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
-</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jexcel/1.5.0/js/jquery.jexcel.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.0.272/jspdf.debug.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jexcel/1.5.0/css/jquery.jexcel.min.css" type="text/css" />
+
+<div id="my"></div>
+<P id="demo" >Create</P>
+<script>
+
+    var leftmargin=5;
+    var topmargin = 5;
+    var labelheight = 29.8;
+    var labelwidth = 63.5;
+    var columns = 3;
+    var rows = 9;
+    var columngap = 3;
+    var rowgap = 0;
+    var font = "";
+
+    data = [
+        ['john', 'smith', '10'],
+        ['angle', 'dsfsd', 'sdf'],
+        ['sf', 'sfdsdfs', 'sdfsdfsdfsdfs']
+    ];
+
+    $('#my').jexcel({
+        data:data,
+        colWidths: [ 300, 300, 80 ],
+        colHeaders: [ 'Name','AgeGroup','Note']});
+
+    function createPDF(update_preview) {
+        var pdf = new jsPDF();
+        var labeldata = $('#my').jexcel('getData');
+
+
+        var numberoflabels = data.length;
+        var i;
+        var j;
+        var k=0;
+        var top = 0;
+        var left = 0;
+        // loop through each label
+
+            for (i = 0; i < (columns); i++) {
+                if (k>(numberoflabels-1)){break;}
+                for (j = 0; j < (rows); j++) {
+
+                    if (k>(numberoflabels-1))   {break;}
+                    top = topmargin + (j * (labelheight + rowgap));
+                    left = leftmargin + ( i * ( labelwidth + columngap));
+                    pdf.setDrawColor(0);
+                    pdf.setLineWidth(0.5);
+                    pdf.roundedRect( left, top, labelwidth, labelheight, 3, 3, "S");
+                    if (data[k][0]) {
+                        pdf.setFontSize(40);
+                        pdf.text(left + 10, top + 10, data[k][0]);
+                    }
+                    if (data[k][1]) {
+                        pdf.setFontSize(12);
+                        pdf.text(left + 40, top + 10, data[k][1]);
+                    }
+                    if (data[k][2]) {
+                        pdf.setFontSize(14);
+                        pdf.text(left + 10, top + 30, data[k][2]);
+                    }
+                    k=k+1;
+                }
+            }
+        pdf.save('hello_world.pdf');
+        document.getElementById("demo").innerHTML = "YOU CLICKED ME!";
+    }
+
+    document.getElementById("demo").onclick= function() {
+        createPDF(false);
+    };
+
+
+
+
+</script>
+
 </html>
