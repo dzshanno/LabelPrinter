@@ -9,13 +9,14 @@
 
 <P id="demo" >Click here to CreatePDF</P>
 <p>
-<p> Version 0.1
+<p> Version 0.2 - Name scaled to fit
     <script>
-
+    // all sizes in mm except font sizes which are points
         var leftmargin=7;
         var topmargin = 15;
         var labelheight = 29.8;
         var labelwidth = 63.5;
+        var maxtextwidth = 58;
         var columns = 3;
         var rows = 9;
         var columngap = 3;
@@ -45,7 +46,9 @@
             var top = 0;
             var left = 0;
             var textwidth = 0;
-            var page=0;
+            var unittextwidth = 0;
+            var fontsize = 0;
+
             // loop through each label
             for (page = 0; page < numberoflabels/(rows*columns); page++) {
                 if (page>0) {pdf.addPage();}
@@ -64,10 +67,17 @@
                         pdf.setDrawColor(0);
                         pdf.setLineWidth(0.5);
                         pdf.roundedRect(left, top, labelwidth, labelheight, 3, 3, "S");
+                        // if the cell in question isnt blank ## might not show 0 either ##
                         if (data[k][0]) {
+                            //Find the biggest font that will fit
+                            unittextwidth = pdf.getStringUnitWidth(data[k][0]);
+                            //fontsize in points = labelwidth in points / unit length of the text
+                            fontsize = Math.floor((maxtextwidth * (72 / 25.6))/unittextwidth);
+                            if (fontsize>45){ fontsize=45;}
 
-                            pdf.setFontSize(40);
-                            textwidth = pdf.getStringUnitWidth(data[k][0]) * 40 / (72 / 25.6);
+                            pdf.setFontSize(fontsize);
+                            // find the width of the text based on fon
+                            textwidth = pdf.getStringUnitWidth(data[k][0]) * fontsize / (72 / 25.6);
                             pdf.text(left + ((labelwidth - textwidth) / 2), top + 20, data[k][0]);
                         }
                         if (data[k][1]) {
