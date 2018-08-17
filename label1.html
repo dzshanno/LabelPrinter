@@ -76,17 +76,23 @@
                             if (fontsize>45){ fontsize=45;}
 
                             pdf.setFontSize(fontsize);
-                            // find the width of the text based on fon
+
                             textwidth = pdf.getStringUnitWidth(data[k][0]) * fontsize / (72 / 25.6);
                             pdf.text(left + ((labelwidth - textwidth) / 2), top + 20, data[k][0]);
                         }
                         if (data[k][1]) {
                             pdf.setFontSize(12);
-                            pdf.text(left + 50, top + 5, data[k][1]);
+                            textwidth = pdf.getStringUnitWidth(data[k][1]) * 12 / (72 / 25.6);
+                            // right align with a margin of 3
+                            pdf.text(left + (labelwidth - (textwidth+3)), top + 5, data[k][1]);
+                            
                         }
                         if (data[k][2]) {
                             pdf.setFontSize(12);
-                            pdf.text(left + 10, top + 28, data[k][2]);
+                            textwidth = pdf.getStringUnitWidth(data[k][2]) * 12 / (72 / 25.6);
+                            // center align
+                            pdf.text(left + ((labelwidth - textwidth) / 2), top + 28, data[k][2]);
+
                         }
                         k = k + 1;
                     }
