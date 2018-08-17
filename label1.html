@@ -4,10 +4,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jexcel/1.5.0/js/jquery.jexcel.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.0.272/jspdf.debug.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jexcel/1.5.0/css/jquery.jexcel.min.css" type="text/css" />
-
+<div><h1>Name label pdf generator</h1>
+<P> Update the table below and click create to save a pdf in the right format for the Wildcats name labels</P></div>
 <div id="my"></div>
-
-<P id="demo" >Click here to CreatePDF</P>
+title <input type="text" id="pagetitle">
+filename <input type=text" id="filename">
+<button type="button" id="demo" >Click here to CreatePDF</button>
 <p>
 <p> Version 0.2 - Name scaled to fit
     <script>
@@ -48,11 +50,19 @@
             var textwidth = 0;
             var unittextwidth = 0;
             var fontsize = 0;
+            var savename = "";
+            var pagetitle = "";
 
             // loop through each label
             for (page = 0; page < numberoflabels/(rows*columns); page++) {
                 if (page>0) {pdf.addPage();}
                 pdf.setPage(page+1);
+                // Add page title
+
+                    pagetitle = document.getElementById("pagetitle").value;
+                if (pagetitle) {
+                    pdf.text(120,8, pagetitle);
+                }
                 for (i = 0; i < (columns); i++) {
                     if (k > (numberoflabels - 1)) {
                         break;
@@ -85,7 +95,7 @@
                             textwidth = pdf.getStringUnitWidth(data[k][1]) * 12 / (72 / 25.6);
                             // right align with a margin of 3
                             pdf.text(left + (labelwidth - (textwidth+3)), top + 5, data[k][1]);
-                            
+
                         }
                         if (data[k][2]) {
                             pdf.setFontSize(12);
@@ -98,8 +108,9 @@
                     }
                 }
             }
-            pdf.save('hello_world.pdf');
-            document.getElementById("demo").innerHTML = "YOU CLICKED ME!";
+            savename= document.getElementById("filename").value;
+            pdf.save(savename+".pdf");
+
         }
 
         document.getElementById("demo").onclick= function() {
