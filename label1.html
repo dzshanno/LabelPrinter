@@ -12,8 +12,8 @@
 <p> Version 0.1
     <script>
 
-        var leftmargin=5;
-        var topmargin = 5;
+        var leftmargin=7;
+        var topmargin = 15;
         var labelheight = 29.8;
         var labelwidth = 63.5;
         var columns = 3;
@@ -45,33 +45,41 @@
             var top = 0;
             var left = 0;
             var textwidth = 0;
+            var page=0;
             // loop through each label
-
-            for (i = 0; i < (columns); i++) {
-                if (k>(numberoflabels-1)){break;}
-                for (j = 0; j < (rows); j++) {
-
-                    if (k>(numberoflabels-1))   {break;}
-                    top = topmargin + (j * (labelheight + rowgap));
-                    left = leftmargin + ( i * ( labelwidth + columngap));
-                    pdf.setDrawColor(0);
-                    pdf.setLineWidth(0.5);
-                    pdf.roundedRect( left, top, labelwidth, labelheight, 3, 3, "S");
-                    if (data[k][0]) {
-
-                        pdf.setFontSize(40);
-                        textwidth = pdf.getStringUnitWidth(data[k][0])*40/(72/25.6);
-                        pdf.text(left + ((labelwidth-textwidth)/2), top + 20, data[k][0]);
+            for (page = 0; page < numberoflabels/(rows*columns); page++) {
+                if (page>0) {pdf.addPage();}
+                pdf.setPage(page+1);
+                for (i = 0; i < (columns); i++) {
+                    if (k > (numberoflabels - 1)) {
+                        break;
                     }
-                    if (data[k][1]) {
-                        pdf.setFontSize(12);
-                        pdf.text(left + 50, top + 5, data[k][1]);
+                    for (j = 0; j < (rows); j++) {
+
+                        if (k > (numberoflabels - 1)) {
+                            break;
+                        }
+                        top = topmargin + (j * (labelheight + rowgap));
+                        left = leftmargin + (i * (labelwidth + columngap));
+                        pdf.setDrawColor(0);
+                        pdf.setLineWidth(0.5);
+                        pdf.roundedRect(left, top, labelwidth, labelheight, 3, 3, "S");
+                        if (data[k][0]) {
+
+                            pdf.setFontSize(40);
+                            textwidth = pdf.getStringUnitWidth(data[k][0]) * 40 / (72 / 25.6);
+                            pdf.text(left + ((labelwidth - textwidth) / 2), top + 20, data[k][0]);
+                        }
+                        if (data[k][1]) {
+                            pdf.setFontSize(12);
+                            pdf.text(left + 50, top + 5, data[k][1]);
+                        }
+                        if (data[k][2]) {
+                            pdf.setFontSize(12);
+                            pdf.text(left + 10, top + 28, data[k][2]);
+                        }
+                        k = k + 1;
                     }
-                    if (data[k][2]) {
-                        pdf.setFontSize(12);
-                        pdf.text(left + 10, top + 28, data[k][2]);
-                    }
-                    k=k+1;
                 }
             }
             pdf.save('hello_world.pdf');
